@@ -1,0 +1,80 @@
+﻿<label>Search for:</label>
+<input @bind="search" @bind:event="oninput" class="form form-control col-2"/>
+
+<div class="alert alert-primary mt-2 col-5">
+    <span class="d-block">Total Occurences: (@FoundWordCount)</span>
+    @if (FoundWordCount > 0)
+    {
+        <div class="row">
+            <input type="number" @bind="number" @bind:event="oninput" class="form form-control col-2 m2" min="1" max="@FoundWordCount" />
+            <label>(@(number) / @(FoundWordCount))</label>
+        </div>
+    }
+    @foreach (var item in words)
+    {
+        if (item.Highlighted)
+        {
+            <span style="background-color: orange;" class="d-inline-block mr-1">
+                @item.word
+            </span>
+        }
+        else if (item.SearchFor)
+        {
+            <span style="background-color: deepskyblue;" class="d-inline-block mr-1">
+                @item.word
+            </span>
+        }
+        else
+        {
+            <span class="d-inline-block mr-1">
+                @item.word
+            </span>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string SearchWord { get; set; }
+    class Word
+    {
+        public string word { get; set; }
+        public bool SearchFor { get; set; }
+        public bool Highlighted { get; set; }
+    }
+    List<Word> words;
+    protected override void OnInitialized()
+    {
+        words = new List<Word>();
+        foreach (var item in SearchWord.Split(' '))
+        {
+            words.Add(new Word { word = item });
+        }
+    }
+    private string _search;
+    public string search
+    {
+        get { return _search; }
+        set
+        {
+            words.ForEach(s => s.SearchFor = false);
+            _search = value;
+            if(_search.Count() > 2)
+            {
+                words = words.Select(w => w.word.Contains(_search) ? new Word { word = w.word, SearchFor = true } : new Word { word = w.word }).ToList();
+            }
+        }
+    }
+    private int _number;
+    public int number
+    {
+        get { return _number; }
+        set
+        {
+            words.ForEach(s => s.Highlighted = false);
+            _number = value;
+            words.Where(s => s.SearchFor).Skip(_number - 1).First().Highlighted = true;
+        }
+    }
+    public int FoundWordCount => words.Where(s => s.SearchFor).Count();
+}
