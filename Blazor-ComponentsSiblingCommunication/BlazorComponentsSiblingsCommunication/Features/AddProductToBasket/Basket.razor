@@ -1,0 +1,24 @@
+﻿@implements IDisposable
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Your Products
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        @foreach (var item in AddToBasketHandler.addToBasketRequests)
+        {
+            <a class="dropdown-item" href="#">@item.ProductName  @item.ProductPrice</a>
+        }
+    </div>
+</div>
+
+@code {      
+    protected override void OnInitialized()
+    {
+        AddToBasketHandler.Update += () => StateHasChanged();
+    }
+    public void Dispose()
+    {
+        AddToBasketHandler.Update -= () => StateHasChanged();
+    }
+}
