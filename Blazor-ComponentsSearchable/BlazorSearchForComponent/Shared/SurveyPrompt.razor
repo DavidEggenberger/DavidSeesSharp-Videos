@@ -1,0 +1,22 @@
+﻿@inherits SearchComponent
+
+<div class="alert alert-secondary mt-4 bg-@(IsSearchAfter ? "success" : "white")" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <span class="text-nowrap">
+        Please take our
+        <a target="_blank" class="font-weight-bold" href="https://go.microsoft.com/fwlink/?linkid=2137813">brief survey</a>
+    </span>
+    and tell us what you think.
+</div>
+
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public string Title { get; set; }
+    protected override void OnInitialized()
+    {
+        Tags = new string[] { "Survey", "User" };
+    }
+}

@@ -1,0 +1,22 @@
+﻿@page "/"
+@inherits SearchComponent
+
+<div class="bg-@(IsSearchAfter ? "success" : "white")">
+    <h1>Hello, world!</h1>
+
+    Welcome to your new app.
+
+    <SurveyPrompt Title="How is Blazor working for you?" />
+</div>
+
+<SurveyPrompt></SurveyPrompt>
+<Counter></Counter>
+<FetchData></FetchData>
+
+@code{
+    protected override void OnInitialized()
+    {
+        Tags = new string[] { "Home", "User" };
+    }
+}
+
