@@ -1,0 +1,16 @@
+﻿@page "/"
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<VisitContext> contextFactory
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{      
+    protected override async Task OnInitializedAsync()
+    {
+        using VisitContext visitContext = contextFactory.CreateDbContext();
+        visitContext.PageVisits.Add(new PageVisit { TimeOfVisit = DateTime.Now });
+        await visitContext.SaveChangesAsync();
+    }
+}

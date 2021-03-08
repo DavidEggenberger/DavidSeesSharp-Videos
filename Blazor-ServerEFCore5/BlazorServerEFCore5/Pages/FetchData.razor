@@ -1,0 +1,70 @@
+﻿@page "/fetchdata"
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<VisitContext> contextFactory
+@using BlazorServerEFCore5.Data
+@using Microsoft.EntityFrameworkCore
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (pageVisits == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var visit in pageVisits)
+            {
+                <tr>
+                    <td>@visit.Id</td>
+                    <td>
+                        <input type="date" @bind="visit.TimeOfVisit" @bind:event="oninput"/>
+                    </td>
+                    <td>
+                        <button class="btn btn-success" @onclick="async() => await Update(visit)">Update</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="async() => await Delete(visit)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private PageVisit[] pageVisits;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using VisitContext visitContext = contextFactory.CreateDbContext();
+        pageVisits = await visitContext.PageVisits.ToArrayAsync();
+    }
+    public async Task Update(PageVisit visit)
+    {
+        using VisitContext visitContext = contextFactory.CreateDbContext();
+        visitContext.Entry(visit).State = EntityState.Modified;
+        await visitContext.SaveChangesAsync();
+        pageVisits = visitContext.PageVisits.ToArray();
+        StateHasChanged();
+    }
+    public async Task Delete(PageVisit visit)
+    {
+        using VisitContext visitContext = contextFactory.CreateDbContext();
+        visitContext.Remove(visit);
+        await visitContext.SaveChangesAsync();
+        pageVisits = visitContext.PageVisits.ToArray();
+        StateHasChanged();
+    }
+}
