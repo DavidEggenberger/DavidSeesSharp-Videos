@@ -1,0 +1,67 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<div class="alert alert-info" dropzone="true" 
+     ondragover="event.preventDefault();"
+        ondragstart="event.dataTransfer.setData('', event.target.id);"
+     @ondrop="() =>
+              {
+                  uis.Where(s => s.Dragged).FirstOrDefault().Event();
+                  uis.Where(s => s.Dragged).FirstOrDefault().Dragged = false;
+              }"
+     >
+    @foreach (var item in ints)
+    {
+        <h9>@item</h9>
+    }
+</div>
+
+<div class="row">
+    @foreach (var item in uis)
+    {
+        <div draggable="true" class="alert alert-secondary"
+             @ondragstart="() => item.Dragged = true"
+             >
+            @item.Description
+        </div>
+    }
+</div>
+
+
+@code{
+    List<UI> uis;
+    List<int> ints;
+    protected override void OnInitialized()
+    {
+        ints = Enumerable.Range(0, 1001).ToList();
+        uis = new List<UI>
+        {
+            new UI
+            {
+                Description = "Only even numbers",
+                Event = () => ints = ints.Where(s => s % 2 == 0).ToList()
+            },
+            new UI
+            {
+                Description = "Only numbers bigger than 500",
+                Event = () => ints = ints.Where(s => s > 500).ToList()
+            },
+            new UI
+            {
+                Description = "Reset",
+                Event = () => ints = Enumerable.Range(0, 1001).ToList()
+            },
+        };
+    }
+    class UI
+    {
+        public string Description { get; set; }
+        public bool Dragged { get; set; }
+        public Action Event { get; set; }
+    }
+}
