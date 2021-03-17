@@ -1,0 +1,61 @@
+﻿@inherits LayoutComponentBase
+@using System.Timers
+
+<style>
+    body{
+        margin: 0;
+        height: 100vh;
+        background-image: linear-gradient(90deg, cyan, dodgerblue);
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        perspective: 1000px;
+    }
+    main{
+        border-radius: 10px;
+        height: 500px;
+        width: 1000px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border: 1px solid white;
+        cursor: pointer;
+        transform: rotateX(0deg) rotateY(0deg);
+        transition: 0.4s;
+    }
+</style>
+
+<main style="@css"
+      @onpointermove='p => Change(p, "move")'
+      @onpointerover='p=> { Change(p, "in"); animate = false; timer.Stop(); timer.Start(); }'
+      @onpointerout='p => Change(p, "out")'
+    />
+
+    @code{
+        string css;
+        bool animate;
+        Timer timer;
+        public void Change(PointerEventArgs args, string method)
+        {
+            css = (method, animate) switch
+            {
+                ("out", _) => TransformToCss(0, 0) + "transition: 1s;",
+                ("in", _) => TransformToCss(GetDegree(args.OffsetX, "x"), GetDegree(args.OffsetY, "y")),
+                ("move", true) => "transition: 0s;" + TransformToCss(GetDegree(args.OffsetX, "x"), GetDegree(args.OffsetY, "y")),
+                ("move", false) => TransformToCss(GetDegree(args.OffsetX, "x"), GetDegree(args.OffsetY, "y")),
+                _ => TransformToCss(0, 0),
+            };
+        }
+        protected override void OnInitialized()
+        {
+            timer = new Timer(350);
+            animate = true;
+            timer.AutoReset = false;
+            timer.Elapsed += (o, args) => animate = true;
+        }
+        public string TransformToCss(double x, double y) => $"transform: rotateY({x}deg) rotateX({y}deg);";
+        public double GetDegree(double number, string dimension)
+            => dimension switch
+            {
+                "y" => Math.Clamp((number - 250) / 250 * 10, -10, 10),
+                "x" => - Math.Clamp((number - 500) / 500 * 10, -10, 10),
+            };
+    }
