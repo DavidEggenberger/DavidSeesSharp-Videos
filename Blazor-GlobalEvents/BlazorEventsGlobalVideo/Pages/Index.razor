@@ -1,0 +1,33 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+@if(warning != null)
+{
+    <div class="alert alert-warning m-3">
+        @warning.Date  @warning.Message
+    </div>
+}
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<Counter/>
+
+@code{   
+    WarningEventArgs warning;
+    protected override async Task OnInitializedAsync()
+    {
+        WarningTriggered += (o, args) =>
+        {
+            warning = args;
+            StateHasChanged();
+        };
+        WarningResseted += (a, args) =>
+        {
+            warning = null;
+            StateHasChanged();
+        };
+    }
+}
