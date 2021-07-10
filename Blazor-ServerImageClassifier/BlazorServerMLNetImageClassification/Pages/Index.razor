@@ -1,0 +1,42 @@
+﻿@page "/"
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env
+@using BlazorServerMLNetImageClassificationML.Model
+
+<h1>Hello, world!</h1>
+
+    Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<label>Enter URL of picture to be analyzed</label>
+
+<input class="form form-control col-5 mb-3" @bind="imageURL" @bind:event="oninput" />
+
+<img src="@imageURL" class="d-block" style="max-height: 400px;" />
+
+<button @onclick="async() => await AnalyzeImage(imageURL)" class="btn btn-success mt-3">Check if skyline or residential area</button>
+
+<div class="alert alert-info">@result</div>
+
+@code{
+        string imageURL;
+        string result;
+        HttpClient htp;
+    protected override void OnInitialized()
+    {
+        htp = new HttpClient();
+    }
+    public async Task AnalyzeImage(string uri)
+    {
+        System.IO.Stream stream = await htp.GetStreamAsync(uri);
+        string imagePath = env.WebRootPath + $@"/analyzedimages/{Guid.NewGuid()}.jpg";
+        System.IO.FileStream fileStream = System.IO.File.Create(imagePath);
+        await stream.CopyToAsync(fileStream);
+        await fileStream.DisposeAsync();
+        var input = new ModelInput() { ImageSource = imagePath };
+
+        // Load model and predict output of sample data
+        ModelOutput resultOutput = ConsumeModel.Predict(input);
+        result = $"{resultOutput.Prediction}: Residential: {resultOutput.Score[0]}, Skyline: {resultOutput.Score[1]}";
+    }
+}
