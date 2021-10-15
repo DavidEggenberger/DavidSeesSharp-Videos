@@ -1,0 +1,45 @@
+﻿<style>
+    .Modal{
+        background-color: white;
+        border-radius: 5px;
+        border: 2px solid black;
+        padding: 5px;
+    }
+</style>
+
+<CascadingValue Value="this">
+    <div style="opacity: @(showModal ? "0.5" : "1")">
+            @ChildContent   
+    </div>
+    <div class="Modal" style="@("display:" + ( showModal ? $"block; {modalPosition}" : "none;"))">
+            <div class="d-flex justify-content-end">
+		        <button class="btn btn-danger" @onclick="() => CloseModal()">Close</button>
+	        </div>
+            <DynamicComponent Type="ComponentType" Parameters="ComponentParameters"/>
+	</div> 
+</CascadingValue>
+
+
+@code{
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private bool showModal;
+    private string modalPosition;
+    private Type ComponentType = typeof(Counter);
+    private Dictionary<string, object> ComponentParameters;
+
+    public void ShowModal(MouseEventArgs mouseEventArgs, Type componentType, Dictionary<string, object> componentParameters)
+    {
+        modalPosition = $"position: absolute; top: {20 + mouseEventArgs.ClientY}px; left: {20 + mouseEventArgs.ClientX}px;";
+        ComponentType = componentType;
+        ComponentParameters = componentParameters;
+        showModal = true;
+        StateHasChanged();
+    }
+    public void CloseModal()
+    {
+        showModal = false;
+        StateHasChanged();
+    }
+}

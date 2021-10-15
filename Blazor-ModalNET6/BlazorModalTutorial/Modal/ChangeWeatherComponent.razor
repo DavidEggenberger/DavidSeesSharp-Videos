@@ -1,0 +1,19 @@
+﻿<div class="ChangeWeatherContainer">
+	<h4>Current Temperature: @Weather.TemperatureC</h4>
+	<label>Select new Temperature:</label>
+	<input type="number" @bind="@NewTemperature" @bind:event="oninput"/>
+	<button @onclick="() => { ModalWrapper.CloseModal(); Weather.TemperatureC = NewTemperature; }">Change to: @NewTemperature</button>
+</div>
+
+@code{
+	[CascadingParameter]
+	public ModalWrapperComponent ModalWrapper { get; set; }
+	[Parameter]
+	public FetchData.WeatherForecast Weather { get; set; }
+
+	private int NewTemperature;
+	protected override void OnParametersSet()
+	{
+		NewTemperature = Weather.TemperatureC;
+	}
+}
