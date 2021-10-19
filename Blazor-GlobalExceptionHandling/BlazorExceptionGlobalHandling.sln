@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorExceptionGlobalHandling", "BlazorExceptionGlobalHandling\BlazorExceptionGlobalHandling.csproj", "{D602EB75-4075-475D-B924-89C683C6BC8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D602EB75-4075-475D-B924-89C683C6BC8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D602EB75-4075-475D-B924-89C683C6BC8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D602EB75-4075-475D-B924-89C683C6BC8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D602EB75-4075-475D-B924-89C683C6BC8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B3023EF2-966A-4530-8323-6F1CEF2352AE}
+	EndGlobalSection
+EndGlobal

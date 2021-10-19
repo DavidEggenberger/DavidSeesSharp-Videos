@@ -1,0 +1,37 @@
+﻿@inherits LayoutComponentBase
+@using BlazorExceptionGlobalHandling.ExceptionHandling
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            <CustomErrorBoundary @ref="errorBoundary">
+                <ChildContent>
+                     @Body
+                </ChildContent>
+                <ErrorContent Context="Exception">
+                    <div class="alert alert-primary">
+                        <h3>@Exception.GetType()</h3>
+                        <h3>@Exception.Message</h3>
+                        <button class="btn btn-info" @onclick="() => errorBoundary.Recover()">Clear</button>
+                    </div>
+                </ErrorContent>
+            </CustomErrorBoundary>
+        </article>
+    </main>
+</div>
+
+@code{
+    private CustomErrorBoundary errorBoundary;
+    protected override void OnInitialized()
+    {
+        errorBoundary = new CustomErrorBoundary();
+    }
+}
