@@ -1,0 +1,20 @@
+﻿@page "/"
+@using Microsoft.Extensions.Configuration
+@using BlazorConfigurationFromAPI.Shared
+@inject IConfiguration configuration
+@inject Tenant currentTenant 
+
+<h1>Hello, world! @configuration["Name"] @currentTenant.Name</h1>
+
+@foreach(var color in configuration.GetSection("Colors").Get<string[]>())
+            {
+                <p>@color</p>
+            }
+@foreach (var item in currentTenant.Colors)
+{
+    <p>@item</p>
+}
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
