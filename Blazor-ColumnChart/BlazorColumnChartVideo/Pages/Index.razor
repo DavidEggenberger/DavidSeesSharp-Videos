@@ -1,0 +1,43 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<ColumnComponent Data="data"></ColumnComponent>
+
+@code{
+    public Dictionary<int, List<(string, decimal)>> data = new Dictionary<int, List<(string, decimal)>>
+    {
+        [2017] = new List<(string, decimal)>
+        {
+            ("Jan", 120000),
+            ("Feb", 200000),
+            ("Mar", 220000),
+            ("Apr", 190000),
+            ("Mai", 120000),
+            ("Jun", 320000),
+            ("Jul", 120000),
+            ("Oct", 150000),
+            ("Sep", 130000),
+            ("Nov", 170000),
+            ("Dec", 120000)
+        },
+        [2018] = new List<(string, decimal)>
+        {
+            ("Jan", 100000),
+            ("Feb", 240000),
+            ("Mar", 120000),
+            ("Apr", 390000),
+            ("Mai", 140000),
+            ("Jun", 20000),
+            ("Jul", 120000),
+            ("Oct", 150000),
+            ("Sep", 130000),
+            ("Nov", 270000),
+            ("Dec", 320000)
+        },
+    };
+}

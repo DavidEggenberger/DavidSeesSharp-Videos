@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorColumnChartVideo", "BlazorColumnChartVideo\BlazorColumnChartVideo.csproj", "{C15018DD-7193-4C84-B327-EFD4350AB959}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C15018DD-7193-4C84-B327-EFD4350AB959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15018DD-7193-4C84-B327-EFD4350AB959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C15018DD-7193-4C84-B327-EFD4350AB959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C15018DD-7193-4C84-B327-EFD4350AB959}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08FF7DD1-B58A-4FD5-8C9F-CC8327CE9592}
+	EndGlobalSection
+EndGlobal

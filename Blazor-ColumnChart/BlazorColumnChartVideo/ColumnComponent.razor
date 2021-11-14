@@ -1,0 +1,51 @@
+﻿<style>
+    section{
+        height: 30px;
+        border-top: 3px solid black;
+    }
+    div{
+        transition: .7s all linear;
+    }
+</style>
+
+<div class="alert alert-dark border-dark col-8">
+    <div class="alert alert-primary m-1 mb-4 border-dark">
+        Sales
+        <select class="form form-control ml-2 col-3 d-inline border-dark" @bind="selectedYear" @bind:event="oninput">
+            @foreach (var item in Data.Keys)
+            {
+                <option>@item</option>
+            }
+        </select>
+        @if(selected.Item1 != null)
+        {
+            <h6 class="ml-2 d-inline">Sales in @selected.Item1 @selected.Item2 $</h6>
+        }
+    </div>
+    <div class="d-flex justify-content-between align-items-end m-1" style="height: 300px !important;">
+        <div class="d-flex flex-column-reverse align-self-start">
+            @foreach (var item in Enumerable.Range(1, 10))
+            {
+                <section>@(item * (selectedData.Max(s => s.Item2) / 10))</section>
+            }
+        </div>
+        @foreach (var item in selectedData)
+        {
+            <div @onclick="() => selected = item" class="alert alert-primary border-dark d-flex justify-content-center align-items-end mb-0" style="height: @(300 * (item.Item2 / selectedData.Max(s => s.Item2)))px; width: 45px;">@item.Item1</div>
+        }
+    </div>
+</div>
+
+
+@code {
+    (string, decimal) selected;
+    int selectedYear;
+    [Parameter]
+    public Dictionary<int, List<(string, decimal)>> Data { get; set; }
+    public List<(string, decimal)> selectedData => Data.Where(s => s.Key == selectedYear)
+        .SelectMany(s => s.Value).ToList();
+    protected override void OnInitialized()
+    {
+        selectedYear = Data.Keys.Max();
+    }
+}
