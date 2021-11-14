@@ -1,0 +1,20 @@
+﻿@page "/"
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor htp
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@foreach (var item in cookies)
+{
+    <div class="alert alert-info">
+        @item.Key
+        @item.Value
+    </div>
+}
+
+@code{
+    [CascadingParameter]
+    public List<Cookie> cookies {get; set;}
+}
