@@ -1,0 +1,75 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager nav
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor htp
+@implements IDisposable
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<AuthorizeView>
+    <Authorized>
+        <h1>hello, @context.User.Claims.First().Value</h1>
+    </Authorized>
+</AuthorizeView>
+
+<form method="post" action="login">
+    <input class="form-control col-4" type="text" name="userName"/>
+    <button class="btn btn-secondary">Login in</button>
+</form>
+
+@foreach (var user in OurHub.currentUser.Where(s => s.Key != htp.HttpContext.User.Claims.First().Value))
+{
+    <div class="alert alert-info">
+        @user.Key
+        <input type="text" class="form-control" @bind="message" @bind:event="oninput"/>
+        <button @onclick="async() => await SendToUser(user.Key)" class="btn btn-success">Send Message to @user.Key</button>
+    </div>
+}
+
+@foreach (var item in messages)
+{
+    <div class="alert alert-light">@item</div>
+}
+
+@code{
+    string message;
+    List<string> messages = new List<string>();
+    public HubConnection hubConnection;
+    public async Task SendToUser(string userName)
+    {
+        await hubConnection.InvokeAsync("SendSpecific", userName, message);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+            {
+                if (htp.HttpContext.Request.Cookies.Count > 0)
+                {
+                    opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+                }
+            }).Build();
+        hubConnection.On("Update", () =>
+        {
+            StateHasChanged();
+        });
+        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        {
+            messages.Add($"{user} : {message}");
+            StateHasChanged();
+        });
+        await hubConnection.StartAsync();
+        if(htp.HttpContext.User.Claims.Count() > 0)
+        {
+            await hubConnection.InvokeAsync("NotifyEveryoneIn");
+        }
+    }
+    public void Dispose()
+    {
+        hubConnection.InvokeAsync("NotifyEveronyOut");
+    }
+}
